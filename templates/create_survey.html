@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form class="form-horizontal" role="form" action="/survey" method="POST">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="email">Survey Title:</label>
+	    <div class="col-sm-10">
+	      <input type="text" class="form-control" id="survey_title" name="survey_title" placeholder="Survey title" required>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="pwd">Survey Category:</label>
+	    <div class="col-sm-10"> 
+	    	 <select name="survey_category" class="form-control" id="survey_category">
+			    <option value="testing">Testing</option>
+			    <option value="employee">Employee</option>
+			    <option value="sports">Sports</option>
+			    <option value="drama">Drama</option>
+			  </select>
+	    
+	    </div>
+	  </div>
+	  <div class="form-group"> 
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-primary">Create Survey</button>
+	    </div>
+	  </div>
+</form>
+{% endblock %}

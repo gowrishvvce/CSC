@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="inner cover">
+        <h1 class="cover-heading">Survey Prototype</h1>
+        <p class="lead">This is the home page for survey prototype.</p>
+        <p class="lead">
+          <a href="#" class="btn btn-lg btn-default">Learn more</a>
+        </p>
+
+  <div class="list-group">
+    {% for survey in surveys %}
+      <a href="/survey/{{survey['survey_id']}}" class="list-group-item">{{survey['survey_title']}}</a>
+    {% endfor %}
+  </div>
+   
+
+  </div>
+
+
+{% endblock %}

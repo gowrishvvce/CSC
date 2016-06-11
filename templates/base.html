@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+
+     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+
+</head>
+<body>
+
+      <!-- Fixed navbar -->
+    {% block header %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Survey Prototye</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Survey <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin">Create a Survey</a></li>
+                <li><a href="/survey">Take a Survey</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <!-- Login and Signup form -->
+
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+              <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+         </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    {% endblock %}
+
+
+
+  <!-- Begin page content -->
+    <div id="content"></div>
+        <div class="container">
+          {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer goes here -->
+   <footer class="footer">
+        {% block footer %}
+          <div class="container">
+            <p class="text-muted text-center">&copy; Copyright 2016 by  <a href="#">protypes</a></p>
+          </div>
+      {% endblock %}
+    </footer>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  
+</body>
+</html>
