@@ -52,6 +52,7 @@ def get_survey(sid):
 # CRUD For questions
 
 def create_question(question,options):
+
 	cursor = db.cursor()
 	sql = "INSERT INTO survey_questions(question,options) VALUES('%s','%s')"%(question,options)
 	try:
@@ -120,10 +121,10 @@ db = MySQLdb.connect(host = "localhost",user = "root",passwd = "root",db = "surv
 # insert_survey_questions_mapping(1,3)
 
 # Survey question create
-# question = "What is the name of your first pet"
-# options = json.dumps(["Sony","Putti","Frodo"])
-# qid = create_question(question,options)
-# print "The created question is " + str(qid)
+question = "What is the name of your first pet"
+options = json.dumps(['Sony','Putti','Frodo'])
+qid = create_question(question,options)
+print "The created question is " + str(qid)
 
 # Create a survey
 # print get_surveys(1)

@@ -4,9 +4,12 @@
     {% block head %}
     <title>{% block title %}{% endblock %} - My Webpage</title>
     {% endblock %}
-
-     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/toastr.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -71,6 +74,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toastr.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   
 </body>

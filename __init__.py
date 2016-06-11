@@ -1,4 +1,4 @@
-from flask import Flask, session, redirect, url_for, escape, request,render_template,url_for
+from flask import Flask, session, redirect, url_for, escape, request,render_template,url_for,jsonify
 import json
 from db import *
 
@@ -41,6 +41,25 @@ def admin():
 	name = 'admin'
 	print name
 	return render_template('admin.html',name = name)
+
+
+@app.route('/save_options',methods=['POST'])
+def save_options():
+	
+	question = str(request.form['question'])
+	options = str(request.form['options'])
+
+	try:
+		question_id = create_question(question,options)
+		# if isinstance(question_id, int ):
+		message = {'success':1,'message' : 'Successfully created'}
+			
+	except Exception, e:
+		message = {'success':0,'message' : 'Something went wrong'}
+	
+	return jsonify(results=message)
+	
+
 
 @app.route('/survey',methods=['GET','POST'])
 def create_new_survey():
