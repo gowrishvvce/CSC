@@ -43,10 +43,16 @@
 
           <!-- Login and Signup form -->
 
-          <ul class="nav navbar-nav navbar-right">
-              <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-              <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-         </ul>
+      <ul class="nav navbar-nav navbar-right">
+            {% if not session.logged_in %}
+       <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+       <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
+          {% else %}
+        <li><a>Hi {{ session.user_name }}</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          {% endif %}
+
+       </ul>
 
         </div><!--/.nav-collapse -->
       </div>

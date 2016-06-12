@@ -277,5 +277,15 @@ $(document).ready(function(){
 
       $('#login-button').click(login_user);
 
+      //For the list group
+       $('.parent-item').on('click', function() {
+        $('.glyphicon', this)
+          .toggleClass('glyphicon-chevron-right')
+          .toggleClass('glyphicon-chevron-down');
+      });
+
+
+
+
  });  
 

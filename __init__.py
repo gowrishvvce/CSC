@@ -6,7 +6,6 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = "enter your secret key here"
 app.config['SESSION_TYPE'] = 'filesystem'
-# app.config['SESSION_TYPE'] = 'memcached'
 
 def login_required(test):
     @wraps(test)
@@ -16,7 +15,6 @@ def login_required(test):
         else:
 			return redirect(url_for('login'))
     return wrap
-
 
 @app.errorhandler(404)
 def not_found(error):
@@ -30,12 +28,16 @@ def not_found(error):
 
 @app.route('/home',methods=['GET', 'POST'])
 def home_route():
-	# uid = request.args.get('uid')
-	uid =  1
-	surveys = get_surveys(uid)
+	
+	user_id = ''
 	user_name = ''
-	if 'user_name' in session:
+	surveys = []
+
+	if 'logged_in' in session:
+		user_id = session['user_id']
 		user_name = session['user_name']
+		surveys = get_surveys(user_id)
+		
 
 	return render_template('home.html',surveys = surveys,username = user_name)
 
@@ -50,10 +52,12 @@ def login():
 
 		user_name = str(request.form['user_name'])
 		user_password = str(request.form['user_password'])
-
-		if verify_login(user_name,user_password):
+		user_id = verify_login(user_name,user_password)
+		
+		if bool(user_id) and user_id > 0:
 			session['logged_in'] = True
 			session['user_name'] = user_name
+			session['user_id'] = int(user_id)
 			message = {'success' : 1,'message':'User Successfully logged in'}
  		else:
 			error = 'Invalid username or password'
@@ -92,6 +96,7 @@ def register():
 				user_id = insert_user(user_name,first_name,last_name,user_email,user_password)
 				session['logged_in'] = True
 				session['user_name'] = user_name
+				session['user_id'] = user_id
 				message = {'success' : 1,'message' : 'Successfully registered'}
 
 			except Exception, e:
@@ -104,17 +109,10 @@ def register():
 
 	return render_template('register.html')
 
-@app.route('/admin',methods=['GET','POST'])
-def admin():
-	name = 'admin'
-	print name
-	return render_template('admin.html',name = name)
-
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     return redirect (url_for('login'))
-
 
 @app.route('/save_options',methods=['POST'])
 def save_options():
@@ -124,7 +122,6 @@ def save_options():
 
 	try:
 		question_id = create_question(question,options)
-		# if isinstance(question_id, int ):
 		message = {'success':1,'message' : 'Successfully created'}
 			
 	except Exception, e:
@@ -138,11 +135,10 @@ def save_options():
 def create_new_survey():
 	
 	if request.method == 'POST':
-		# uid = int(str(request.form['uid']))
-		uid = 1
+		user_id = session['user_id']
 		survey_title = str(request.form['survey_title'])
 		survey_category = str(request.form['survey_category']) 
-		sid = create_survey(survey_title,survey_category,uid)
+		sid = create_survey(survey_title,survey_category,user_id)
 		sid = str(sid)
 		return redirect('/survey/'+sid)
 
@@ -152,6 +148,7 @@ def create_new_survey():
 		
 # auth required
 @app.route('/survey/<int:survey_id>',methods=['GET'])
+@login_required
 def survey(survey_id):
 	survey = get_survey(survey_id)
 	return render_template('survey.html',survey = survey)

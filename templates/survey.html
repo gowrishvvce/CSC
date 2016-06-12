@@ -3,7 +3,68 @@
 {% block content %}
 
 <h1>Survey Page</h1>
+
+{% if session.logged_in %}
+        
 <p>{{survey[1]}}</p>
 
+<h2 align="center">Add Questions</h2>  
+
+  <div class="row">
+    
+<div class="just-padding">
+
+
+<div class="list-group list-group-root well">
+	
+  {% for question in survey['questions'] %}     
+  
+  <a href="#item-{{loop.index}}" class="list-group-item parent-item" data-toggle="collapse">
+    <i class="glyphicon glyphicon-chevron-right"></i>{{question['question'] }}
+  </a>
+  
+  <div class="list-group collapse" id="item-{{loop.index}}">
+    
+    {% for option in question['options'] %}
+    <a class="list-group-item">
+      <i class="glyphicon glyphicon-chevron-right"></i>{{ option }}
+    </a>
+    {% endfor %}
+    
+  </div>
+  
+ </div>
+{% endfor %}
+
+ </div>
+</div>
+
+  <div class="row" id="questions-form" style="border: 1px solid green; margin-bottom: 100px;padding: 10px;background: #eee;">  
+          <div class="form-group">
+              <input type="text" id="question" class="form-control" placeholder="Type your question here" required>
+          </div>
+          <div class="table-responsive">  
+               <table class="table table-bordered" id="dynamic_field">  
+                    <tr class="option-item">  
+                         <td><input type="text"  name="name[]" placeholder="Enter the option" class="form-control option" /></td>  
+                         <td><button type="button" name="add" id="add" class="btn btn-success">Add More</button></td>  
+                    </tr>  
+               </table>  
+               <button id="submit" class="btn btn-info text-center center-block" >Submit</button>  
+          </div>  
+     </div>  
+
+  <button class="btn btn-primary center-block text-center" id="add-more-question">Add more questions</button>
+
+      
+
+{% else %}
+  
+  <div class="danger">
+  	You dont have sufficient permissions to view this page.
+  </div>
+
+
+{% endif %}
 
 {% endblock %}
