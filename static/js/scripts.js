@@ -1,3 +1,8 @@
+String.prototype.isEmpty = function() 
+{
+      return (this.length === 0 || !this.trim());
+};
+
 function reset_form_data()
 {
   $('#question').val('');
@@ -83,6 +88,179 @@ function remove_option()
 
 }
 
+//User registration actions 
+function login_user()
+{
+
+    var user_name = $('#user_name').val();
+    var user_password = $('#user_password').val();
+
+
+
+    if(user_name.isEmpty())
+    {
+      toastr.error("Invalid form data","User login field cannot be empty");
+      return;
+    }
+
+    if(user_password.isEmpty())
+    {
+      toastr.error("Invalid form data","Password field cannot be empty");
+      return;
+    }
+    else
+    {
+
+      var form_data = {};
+
+      form_data['user_password'] = user_password;
+      form_data['user_name'] = user_name;
+
+      jQuery.ajax({
+            type: 'POST',               
+            data: form_data,
+            url: "/login",
+            dataType : 'json',  
+            success : function(data)
+            {
+              data = data['results'];
+              var success = parseInt(data['success']);
+             
+              if(success)
+              {
+                 window.location.href = '/home';
+              }
+              else
+              {
+                var messages = data['message'];
+                $.each(messages,function(index,message) 
+                {
+                  toastr.error("Invalid form data",message);
+                });
+                
+              }
+            
+            }
+           
+        });
+
+
+
+    }
+      
+}
+
+
+
+
+
+
+function register_user()
+    {
+
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    var first_name = $('#first_name').val();
+    
+    var last_name =  $('#last_name').val();
+    
+    var user_email =  $('#user_email').val();
+        
+    var user_name = $('#user_name').val();
+    
+    var user_password = $('#user_password').val();
+
+    var password_confirm  = $('#confirm_password').val();
+  
+
+    if(first_name.isEmpty())
+    {
+      toastr.error("Invalid form data","First Name field can't be empty");
+      return;
+    }
+
+    if(user_email.isEmpty())
+    {
+      toastr.error("Invalid form data","Email field can't be empty");
+      return;
+    }
+
+    if(!re.test(user_email))
+    {
+      toastr.error("Invalid form data","Please enter a valid Email");
+      return;
+    }
+    
+    if(user_name.isEmpty())
+    {
+      toastr.error("Invalid form data","User login field cannot be empty");
+      return;
+    }
+
+    if(user_password.isEmpty())
+    {
+      toastr.error("Invalid form data","Password field cannot be empty");
+      return;
+    }
+
+    if(user_password !== password_confirm)
+    {
+      toastr.error("Invalid form data","Passwords dont match");
+      return;
+    }
+  
+    else
+    {
+
+      var form_data = {};
+
+      form_data['first_name'] = first_name;
+      form_data['user_email'] = user_email;
+      form_data['user_password'] = user_password;
+      form_data['user_name'] = user_name;
+
+      if(last_name)
+      {
+        form_data['last_name'] = last_name;
+      }
+      
+  
+       jQuery.ajax({
+            type: 'POST',               
+            data: form_data,
+            url: "/register",
+            dataType : 'json',  
+        success: function(data)
+            {
+              data = data['results'];
+              var success = parseInt(data['success']);
+
+              if(success)
+              {
+                 toastr.success('Success',data['message']);
+                 window.location.href='/home';
+              }
+              else
+              {
+                var messages = data['message'];
+                $.each(messages,function(index,message) 
+                {
+                  toastr.error("Invalid form data",message);
+                });
+                
+              }
+            
+            }
+           
+        });
+
+
+    }
+
+
+    }
+
+
 $(document).ready(function(){ 
 
         
@@ -93,6 +271,11 @@ $(document).ready(function(){
       $('#add-more-question').click(submit_data);
 
       $('#submit').click(submit_data); 
+
+      // user registration
+      $('#register-button').click(register_user);
+
+      $('#login-button').click(login_user);
 
  });  
 
