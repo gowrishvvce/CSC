@@ -8,14 +8,14 @@ app.secret_key = "enter your secret key here"
 app.config['SESSION_TYPE'] = 'filesystem'
 # app.config['SESSION_TYPE'] = 'memcached'
 
-def login_required(f):
-    @wraps(f)
+def login_required(test):
+    @wraps(test)
     def wrap(*args, **kwargs):
         if 'logged_in' in session:
-        	return f(*args, **kwargs)
-        
-        return redirect(url_for('login'))
-	return wrap
+            return test(*args, **kwargs)
+        else:
+			return redirect(url_for('login'))
+    return wrap
 
 
 @app.errorhandler(404)
@@ -95,7 +95,6 @@ def register():
 				message = {'success' : 1,'message' : 'Successfully registered'}
 
 			except Exception, e:
-				raise
 				errors = []
 				errors.append("Something went wrong please try again")
 				message = {'success' : 0,'message' : errors}
@@ -110,6 +109,11 @@ def admin():
 	name = 'admin'
 	print name
 	return render_template('admin.html',name = name)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect (url_for('login'))
 
 
 @app.route('/save_options',methods=['POST'])
@@ -129,8 +133,8 @@ def save_options():
 	return jsonify(results=message)
 	
 
-
 @app.route('/survey',methods=['GET','POST'])
+@login_required
 def create_new_survey():
 	
 	if request.method == 'POST':
@@ -142,8 +146,8 @@ def create_new_survey():
 		sid = str(sid)
 		return redirect('/survey/'+sid)
 
-	else:
-		return render_template('create_survey.html')
+	
+	return render_template('create_survey.html')
 		
 		
 # auth required

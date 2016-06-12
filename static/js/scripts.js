@@ -125,7 +125,7 @@ function login_user()
             {
               data = data['results'];
               var success = parseInt(data['success']);
-             
+              
               if(success)
               {
                  window.location.href = '/home';
